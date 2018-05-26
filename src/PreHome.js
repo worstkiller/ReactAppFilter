@@ -61,7 +61,7 @@ class PreHome extends React.Component {
                     <CardMedia
                         className={classes.media}
                         image={info_back}
-                        title="Contemplative Reptile"/>
+                        title="Contemplative Reptile" />
 
                     <CardContent position="inherit" className={classes.content}>
                         <Typography gutterBottom variant="headline" component="h2" position="inherit">
@@ -74,7 +74,8 @@ class PreHome extends React.Component {
                     </CardContent>
 
                     <CardActions className={classes.actions}>
-                        <input type="file" id="filePicker" className={classes.input} accept=".xml" onChange={this.props.handClick.openDocument} />
+                        <input type="file" id="filePicker" className={classes.input} accept=".xml"
+                            onChange={this.props.handClick.openDocument} name="files[]" />
 
                         <Button size="medium" color="primary" fullWidth={false} variant="outlined"
                             onClick={this.props.handClick.onClickHandle}>
@@ -90,9 +91,11 @@ class PreHome extends React.Component {
     }
 }
 
+//default props for message and descriptions in this component
 PreHome.defaultProps = {
     title: "Welcome",
     buttonText: "Start",
     description: "Now downloading android app icons made easy and is single click away, try by uploading a appfilter file.",
 };
+
 export default withStyles(styles)(PreHome);

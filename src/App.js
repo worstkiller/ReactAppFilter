@@ -24,11 +24,18 @@ class App extends Component {
    */
   childProps = {
     onClickHandle: function () {
-      document.getElementById('filePicker').click();
-      console.log("click handled for file");
+      if (window.File && window.FileReader) {
+        document.getElementById('filePicker').click();
+        console.log("click handled for file");
+      } else {
+        alert("Sorry, File Reader API not supported yet in this browser please update");
+      }
     },
-    openDocument: function (event) {
-      console.log("open document called"+event);
+    openDocument: function (evt) {
+      var files = evt.target.files;
+      var singleFile = files[0];
+      alert("File selected is "+singleFile.name);
+      console.log("open document called " + singleFile.name);
     }
   }
 
