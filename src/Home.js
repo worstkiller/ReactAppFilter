@@ -8,6 +8,9 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AppIcon from './images/office-application.png';
 import CardActions from '@material-ui/core/CardActions';
+import Divider from '@material-ui/core/Divider';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
 
 const styles = theme => ({
 
@@ -84,16 +87,4 @@ class Home extends React.Component {
     }
 }
 
-Home.defaultProps = {
-    iconsArray: [
-        {
-            name: "Whatsapp",
-            package: "com.android.whatsapp"
-        },
-        {
-            name: "Facebook",
-            package: "com.android.facebook"
-        }
-    ]
-}
 export default withStyles(styles, { withTheme: true })(Home);

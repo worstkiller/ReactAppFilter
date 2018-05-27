@@ -27,7 +27,8 @@ function StartApp(props) {
 function FileLoadedApp(props) {
   return (
     <div className="App">
-      <SimpleAppBar />
+      <SimpleAppBar/>
+      <Home appFilter={props} />
     </div>
   );
 }
@@ -40,7 +41,7 @@ class App extends Component {
   //constructor
   constructor(props) {
     super(props)
-    this.state = { isFileLoaded: false };
+    this.state = { isFileLoaded: false, appFilter: undefined };
     this.onClickHandle = this.onClickHandle.bind(this);
     this.openDocument = this.openDocument.bind(this);
   }
@@ -57,10 +58,24 @@ class App extends Component {
     }
   }
 
+  /**
+   * This parses the files and creates a XML DOM and set the state to refresh things
+   * @param {Input} evt 
+   */
   openDocument(evt) {
     var files = evt.target.files;
     var singleFile = files[0];
-    this.setState({ isFileLoaded: true });
+    var fileReader = new FileReader();
+    var localState = this;
+
+    fileReader.onload = function (e) {
+      var stringData = e.target.result;
+      var parser = new DOMParser(stringData)
+      var xmlData = parser.parseFromString(stringData, "text/xml");
+      localState.setState({ isFileLoaded: true ,appFilter:xmlData});
+      console.log("Document loaded fully");
+    };
+    fileReader.readAsText(singleFile);
     console.log("open document called " + singleFile.name);
   }
 
@@ -69,16 +84,11 @@ class App extends Component {
     const isFile = this.state.isFileLoaded;
     if (isFile) {
       return (
-        <FileLoadedApp {...this} />
+        <FileLoadedApp {...this.state} />
       );
     } else {
       return (
-        //temporarily disabling this
-        // <StartApp {...this} />
-        <div>
-        <SimpleAppBar />
-        <Home/>
-        </div>
+        <StartApp {...this} />
       );
     }
   }
