@@ -51,18 +51,14 @@ const styles = {
 class PreHome extends React.Component {
 
     render() {
-
         const { classes } = this.props;
-
         return (
             <div className={classes.root}>
-
                 <Card className={classes.card}>
                     <CardMedia
                         className={classes.media}
                         image={info_back}
                         title="Contemplative Reptile" />
-
                     <CardContent position="inherit" className={classes.content}>
                         <Typography gutterBottom variant="headline" component="h2" position="inherit">
                             {this.props.title}
@@ -70,22 +66,17 @@ class PreHome extends React.Component {
                         <Typography component="p" position="inherit">
                             {this.props.description}
                         </Typography>
-
                     </CardContent>
-
                     <CardActions className={classes.actions}>
                         <input type="file" id="filePicker" className={classes.input} accept=".xml"
-                            onChange={this.props.handClick.openDocument} name="files[]" />
+                            onChange={this.props.onChange} name="files[]" />
 
                         <Button size="medium" color="primary" fullWidth={false} variant="outlined"
-                            onClick={this.props.handClick.onClickHandle}>
+                            onClick={this.props.onClick}>
                             {this.props.buttonText}
                         </Button>
-
                     </CardActions>
-
                 </Card>
-
             </div>
         );
     }
