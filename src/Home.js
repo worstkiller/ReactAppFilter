@@ -89,7 +89,6 @@ class Home extends React.Component {
             const itemArray = array.getElementsByTagName("item");
             console.log(array.getElementsByTagName("item"));    
             for (var i = 0, max = itemArray.length; i < max; i++) {
-                // Do something with the element here
                 console.log(itemArray[i].getAttribute("component"));
                 return(
                       <h2>{itemArray[i].getAttribute("component")}</h2>  
