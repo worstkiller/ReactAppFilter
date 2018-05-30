@@ -11,6 +11,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = theme => ({
 
@@ -46,54 +47,49 @@ const styles = theme => ({
 //item layout for list in card
 function SingleAppItem(props) {
     const { classes } = props;
+    console.log(props.value.attributes.component.nodeValue);
     return (
-        <Card className={classes.card}>
-            <ListItem>
-                <CardMedia
-                    className={classes.cover}
-                    image={AppIcon}
-                />
-                <div className={classes.details}>
-                    <CardContent className={classes.content}>
-                        <Typography variant="headline">WhatsApp</Typography>
-                        <Typography variant="subheading" color="textSecondary">
-                            com.android.facebook
+        <ListItem>
+            <CardMedia
+                className={classes.cover}
+                image={AppIcon}
+            />
+            <div className={classes.details}>
+                <CardContent className={classes.content}>
+                    <Typography variant="headline">{props.value.attributes.drawable.nodeValue}</Typography>
+                    <Typography variant="subheading" color="textSecondary">
+                        {props.value.attributes.component.nodeValue}
                         </Typography>
-                    </CardContent>
-                </div>
-                <CardActions className={classes.actions}>
-                    <Button size="small" color="primary">
-                        Download
+                </CardContent>
+            </div>
+            <CardActions className={classes.actions}>
+                <Button size="small" color="primary">
+                    Download
                     </Button>
-                </CardActions>
-            </ListItem>
-        </Card>
-
+            </CardActions>
+        </ListItem>
     )
 }
 
 class Home extends React.Component {
+
     render() {
         var array = this.props.appFilter.appFilter;
-        // return (
-        //     <div>
-        //         <List>
-        //             for (let index = 0; index < array.length; index++) {
-        //          const element = array[index];
-        //          <SingleAppItem {...this.props} />
-        //             }
-        //         </List>
-        //     </div>
-        // );
+        const { classes } = this.props;
+
         if (array.getElementsByTagName("item") != null) {
             const itemArray = array.getElementsByTagName("item");
-            console.log(array.getElementsByTagName("item"));    
-            for (var i = 0, max = itemArray.length; i < max; i++) {
-                console.log(itemArray[i].getAttribute("component"));
-                return(
-                      <h2>{itemArray[i].getAttribute("component")}</h2>  
-                );
-            }
+            var list = Array.from(itemArray);
+            
+            return (
+                <div>
+                    <List className={classes.root}>
+                        {list.map(singleItem => (
+                            <SingleAppItem {...this.props} value  = {singleItem}/>
+                        ))}
+                    </List>
+                </div>
+            );
 
         } else {
             return <h3>No Items found</h3>
