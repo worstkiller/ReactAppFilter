@@ -50,6 +50,9 @@ const styles = theme => ({
         justifyContent: "flex-end",
         alignItems: 'center',
         alignContent: "center",
+    },
+    anchor: {
+        textDecoration: "none"
     }
 });
 
@@ -61,7 +64,8 @@ function SingleAppItem(props) {
 
     return (
         <ListItem >
-            <CardMedia id={props.value.packageName} className={classes.cover} image={AppIcon} />
+            <img crossOrigin="Anonymous" id={props.value.packageName} className={classes.cover} src={AppIcon}
+                onLoad={props.onMediaLoaded.bind(this, props.value)} />
             <div className={classes.details}>
                 <CardContent className={classes.content}>
                     <Typography variant="headline">{props.value.title}</Typography>
@@ -71,10 +75,12 @@ function SingleAppItem(props) {
                 </CardContent>
             </div>
             <CardActions className={classes.actions}>
-                <Button id={props.value.packageName}
-                    size="small" color="primary" onClick={props.onDownload.bind(this, props.value)}>
-                    Download
+                <a className={classes.anchor} download={props.value.title + ".png"} id={props.value.title + props.value.packageName}>
+                    <Button
+                        size="small" color="primary">
+                        Download
                     </Button>
+                </a>
             </CardActions>
         </ListItem>
     )
@@ -87,7 +93,7 @@ class Home extends React.Component {
 
     constructor(props) {
         super(props)
-        this.setState = {urlUpdated:""};
+        this.setState = { urlUpdated: "" };
         this.processRequest = this.processRequest.bind(this);
         this.urlExtractor = this.urlExtractor.bind(this);
     }
@@ -114,9 +120,19 @@ class Home extends React.Component {
 
     //this will load the url into card media
     loadUrlIntoCardMedia(url, componentObject) {
-        document.getElementById(componentObject).src = url;
-        this.setState({urlUpdated:url});
-        console.log("image loaded into card view");
+        const imageView = document.getElementById(componentObject.packageName);
+        imageView.src = url;
+        imageView.title = "downloaded";
+        this.processImageDownload(imageView, componentObject);
+        console.log(document.getElementById(componentObject));
+        console.log("load url called");
+    }
+
+    //this will process the image download 
+    processImageDownload(imageSave, componentObject) {
+        const a_href = document.getElementById(componentObject.title + componentObject.packageName);
+        a_href.href = "data:application/octet-stream;charset=utf-8;base64," + this.getBase64Image(imageSave);
+        console.log("process download is executed");
     }
 
     /**
@@ -128,17 +144,18 @@ class Home extends React.Component {
             const matchString = myResponse.match(PATTERN_THIRD);
             const urlMatch = matchString[0].match(PATTERN_THIRD_URL);
             var originalUrl = urlMatch[0];
+            var smallUrl;
             if (originalUrl.includes("=")) {
                 originalUrl = originalUrl.substring(0, originalUrl.indexOf("=")) + "=s512";
             } else if (originalUrl.includes(" ")) {
                 originalUrl = originalUrl.substring(0, originalUrl.indexOf(" ")) + "=s512";
             }
-
-            this.loadUrlIntoCardMedia(originalUrl, evt.packageName);
-            console.log(urlMatch);
+            smallUrl = originalUrl.replace("=s512", "=s128").trim();
+            this.loadUrlIntoCardMedia(originalUrl, evt);
+            console.log(urlMatch[0]);
             console.log(originalUrl);
         } catch (error) {
-            alert("Downloading not supported for this icon");
+            console.log(error);
         }
     }
 
@@ -146,7 +163,11 @@ class Home extends React.Component {
         * This makes the http request and parse the url
         * @param {evt} evt 
         */
-    processRequest(evt) {
+    processRequest(evt, imageView) {
+        if (imageView.target.title === "downloaded") {
+            console.log("returned because same url");
+            return;
+        }
         const finalUrl = downLoadLink + evt.packageName;
         const urlExt = this.urlExtractor;
         fetch(finalUrl, this.options)
@@ -190,7 +211,7 @@ class Home extends React.Component {
                     <List className={classes.root}>
                         {list.map(singleItem => (
                             <Card key={singleItem.attributes.component.nodeValue}>
-                                <SingleAppItem {...this.props} onDownload={this.processRequest}
+                                <SingleAppItem {...this.props} onMediaLoaded={this.processRequest}
                                     value={this.getComponentObject(singleItem)} />
                             </Card>
                         ))}
