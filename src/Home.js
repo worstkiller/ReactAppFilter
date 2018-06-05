@@ -123,7 +123,6 @@ class Home extends React.Component {
         const imageView = document.getElementById(componentObject.packageName);
         imageView.src = url;
         imageView.title = "downloaded";
-        this.processImageDownload(imageView, componentObject);
         console.log(document.getElementById(componentObject));
         console.log("load url called");
     }
@@ -165,6 +164,7 @@ class Home extends React.Component {
         */
     processRequest(evt, imageView) {
         if (imageView.target.title === "downloaded") {
+            this.processImageDownload(imageView.target, evt);
             console.log("returned because same url");
             return;
         }
