@@ -60,8 +60,6 @@ const styles = theme => ({
 //item layout for list in card
 function SingleAppItem(props) {
     const { classes } = props;
-    console.log(props);
-
     return (
         <ListItem >
             <img crossOrigin="Anonymous" id={props.value.packageName} className={classes.cover} src={AppIcon}
@@ -89,7 +87,7 @@ function SingleAppItem(props) {
 /**
  * this returns a list items component
  */
-class Home extends React.Component {
+class MainComponent extends React.Component {
 
     constructor(props) {
         super(props)
@@ -119,7 +117,7 @@ class Home extends React.Component {
     }
 
     getImageInstance(imageSource) {
-        const image = document.createElement("IMG");
+        const image = document.createElement("img");
         image.crossOrigin = "Anonymous";
         image.src = imageSource;
         image.style.width = '512px';
@@ -133,15 +131,12 @@ class Home extends React.Component {
         imageView.src = url;
         imageView.title = "downloaded";
         this.processImageDownload(this.getImageInstance(url), componentObject);
-        console.log(document.getElementById(componentObject));
-        console.log("load url called");
     }
 
     //this will process the image download 
     processImageDownload(imageSave, componentObject) {
         const a_href = document.getElementById(componentObject.title + componentObject.packageName);
         a_href.href = "data:application/octet-stream;charset=utf-8;base64," + this.getBase64Image(imageSave);;
-        console.log("process download is executed");
     }
 
     /**
@@ -161,8 +156,6 @@ class Home extends React.Component {
             }
             smallUrl = originalUrl.replace("=s512", "=s128").trim();
             this.loadUrlIntoCardMedia(originalUrl, evt);
-            console.log(urlMatch[0]);
-            console.log(originalUrl);
         } catch (error) {
             console.log(error);
         }
@@ -174,7 +167,6 @@ class Home extends React.Component {
         */
     processRequest(evt, imageView) {
         if (imageView.target.title === "downloaded") {
-            console.log("returned because same url");
             return;
         }
         const finalUrl = downLoadLink + evt.packageName;
@@ -189,9 +181,8 @@ class Home extends React.Component {
                 }
             })
             .catch(function (error) {
-                console.error(error);
+                console.log(error);
             })
-        console.log(finalUrl);
     }
 
     /**
@@ -234,4 +225,4 @@ class Home extends React.Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Home);
+export default withStyles(styles, { withTheme: true })(MainComponent);

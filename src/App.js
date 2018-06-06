@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import SimpleAppBar from './AppBarMenu';
 import ThemeComponent from './ThemeComponent';
 import { withStyles } from '@material-ui/core/styles';
 import PreHome from './PreHome';
-import Home from './Home';
+import MainComponent from './MainComponent';
 
 const styles = {
   root: {
@@ -28,7 +27,7 @@ function FileLoadedApp(props) {
   return (
     <div className="App">
       <SimpleAppBar/>
-      <Home appFilter={props} />
+      <MainComponent appFilter={props} />
     </div>
   );
 }
@@ -52,7 +51,6 @@ class App extends Component {
   onClickHandle() {
     if (window.File && window.FileReader) {
       document.getElementById('filePicker').click();
-      console.log("click handled for file");
     } else {
       alert("Sorry, File Reader API not supported yet in this browser, please update");
     }
@@ -73,10 +71,8 @@ class App extends Component {
       var parser = new DOMParser(stringData)
       var xmlData = parser.parseFromString(stringData, "text/xml");
       localState.setState({ isFileLoaded: true ,appFilter:xmlData});
-      console.log("Document loaded fully");
     };
     fileReader.readAsText(singleFile);
-    console.log("open document called " + singleFile.name);
   }
 
   //render method for defining the starting component
