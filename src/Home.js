@@ -118,11 +118,21 @@ class Home extends React.Component {
         };
     }
 
+    getImageInstance(imageSource) {
+        const image = document.createElement("IMG");
+        image.crossOrigin = "Anonymous";
+        image.src = imageSource;
+        image.style.width = '512px';
+        image.style.height = '512px';
+        return image;
+    }
+
     //this will load the url into card media
     loadUrlIntoCardMedia(url, componentObject) {
         const imageView = document.getElementById(componentObject.packageName);
         imageView.src = url;
         imageView.title = "downloaded";
+        this.processImageDownload(this.getImageInstance(url), componentObject);
         console.log(document.getElementById(componentObject));
         console.log("load url called");
     }
@@ -130,7 +140,7 @@ class Home extends React.Component {
     //this will process the image download 
     processImageDownload(imageSave, componentObject) {
         const a_href = document.getElementById(componentObject.title + componentObject.packageName);
-        a_href.href = "data:application/octet-stream;charset=utf-8;base64," + this.getBase64Image(imageSave);
+        a_href.href = "data:application/octet-stream;charset=utf-8;base64," + this.getBase64Image(imageSave);;
         console.log("process download is executed");
     }
 
@@ -164,7 +174,6 @@ class Home extends React.Component {
         */
     processRequest(evt, imageView) {
         if (imageView.target.title === "downloaded") {
-            this.processImageDownload(imageView.target, evt);
             console.log("returned because same url");
             return;
         }
