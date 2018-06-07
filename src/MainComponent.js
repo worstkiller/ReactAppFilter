@@ -97,9 +97,11 @@ class MainComponent extends React.Component {
     }
 
     options = {
-        method: 'get',
+        method: 'GET',
         headers: {
             "Allow-Control-Allow-Origin": "*",
+            crossorigin: "anonymous",
+            origin: "https://play.google.com",
         },
     }
 
@@ -130,7 +132,7 @@ class MainComponent extends React.Component {
         const imageView = document.getElementById(componentObject.packageName);
         imageView.src = url;
         imageView.title = "downloaded";
-        this.processImageDownload(this.getImageInstance(url), componentObject);
+        this.processImageDownload(imageView, componentObject);
     }
 
     //this will process the image download 
@@ -191,8 +193,8 @@ class MainComponent extends React.Component {
      */
     getBase64Image(img) {
         var canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalWidth;
         var ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0);
         var dataURL = canvas.toDataURL("image/png");
