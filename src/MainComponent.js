@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import AppIcon from './images/office-application.png';
+import AppIcon from './images/android.svg';
 import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
@@ -132,7 +132,6 @@ class MainComponent extends React.Component {
         const imageView = document.getElementById(componentObject.packageName);
         imageView.src = url;
         imageView.title = "downloaded";
-        this.processImageDownload(imageView, componentObject);
     }
 
     //this will process the image download 
@@ -169,6 +168,7 @@ class MainComponent extends React.Component {
         */
     processRequest(evt, imageView) {
         if (imageView.target.title === "downloaded") {
+            this.processImageDownload(imageView.target, evt);
             return;
         }
         const finalUrl = downLoadLink + evt.packageName;

@@ -19,11 +19,13 @@ const styles = {
         flexGrow: 1,
         align: 'center',
         display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     card: {
-        maxWidth: '80%',
-        margin: '50px 300px 50px 300px',
-        position: 'absolut',
+        width: '55%',
+        margin: '30px 0px 30px 0px',
+        position: 'static',
     },
     media: {
         height: 0,
