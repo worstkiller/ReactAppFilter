@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
+import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import AppIcon from './images/android.svg';
@@ -14,9 +14,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const downLoadLink = "https://play.google.com/store/apps/details?id=";
-const PATTERN_THIRD = "<img\\s+(.*?)src=\\\"https:\\/\\/\\S.*?\\\"\\s+(.*?)alt=\\\"Cover art\\\"(.*?)>";
-const PATTERN_THIRD_URL = "https:\\/\\/\\S.*?(=?)(\\S.*?)\"\\s";
+const downLoadLink = "http://localhost:8010/proxy/details?id=";
 
 /**
  * this styles the components 
@@ -53,6 +51,9 @@ const styles = theme => ({
     },
     anchor: {
         textDecoration: "none"
+    },
+    contentContainer: {
+        margin: 16,
     }
 });
 
@@ -64,13 +65,12 @@ function SingleAppItem(props) {
         <ListItem >
             <img crossOrigin="Anonymous" id={props.value.packageName} className={classes.cover} src={AppIcon}
                 onLoad={props.onMediaLoaded.bind(this, props.value)} />
-            <div className={classes.details}>
-                <CardContent className={classes.content}>
-                    <Typography variant="headline">{props.value.title}</Typography>
-                    <Typography variant="subheading" color="textSecondary">
-                        {props.value.packageName}
-                    </Typography>
-                </CardContent>
+            <div className={`${classes.details} ${classes.contentContainer}`}>
+                <div className={classes.content}>
+                    <Typography variant="title"  style={{ fontWeight: 'bold' }}>{props.value.title}</Typography>
+                    <br />
+                    <Typography variant="subtitle">{props.value.packageName}</Typography>
+                </div>
             </div>
             <CardActions className={classes.actions}>
                 <a className={classes.anchor} download={props.value.title + ".png"} id={props.value.title + props.value.packageName}>
@@ -146,21 +146,39 @@ class MainComponent extends React.Component {
      */
     urlExtractor(myResponse, evt) {
         try {
-            const matchString = myResponse.match(PATTERN_THIRD);
-            const urlMatch = matchString[0].match(PATTERN_THIRD_URL);
-            var originalUrl = urlMatch[0];
-            var smallUrl;
-            if (originalUrl.includes("=")) {
-                originalUrl = originalUrl.substring(0, originalUrl.indexOf("=")) + "=s512";
-            } else if (originalUrl.includes(" ")) {
-                originalUrl = originalUrl.substring(0, originalUrl.indexOf(" ")) + "=s512";
+            console.log("download started");
+
+            const matchString = myResponse.match(/<img[^>]*?alt=['"]Icon image['"][^>]*>/gi);
+
+            if (matchString) {
+                const urlMatch = matchString[0].match(/https?:\/\/\S+/);
+
+                if (urlMatch) {
+                    console.log(matchString);
+                    var originalUrl = urlMatch[0].replace(/"/g, '');
+                    var smallUrl;
+
+                    if (originalUrl.includes("=")) {
+                        originalUrl = originalUrl.substring(0, originalUrl.indexOf("="));
+                    } else if (originalUrl.includes(" ")) {
+                        originalUrl = originalUrl.substring(0, originalUrl.indexOf(" "));
+                    }
+
+                    smallUrl = originalUrl + "=w480-h960-rw".trim();
+                    this.loadUrlIntoCardMedia(originalUrl, evt);
+                    console.log(smallUrl);
+                    console.log(originalUrl);
+                } else {
+                    console.log("URL match not found.");
+                }
+            } else {
+                console.log("Pattern match not found.");
             }
-            smallUrl = originalUrl.replace("=s512", "=s128").trim();
-            this.loadUrlIntoCardMedia(originalUrl, evt);
         } catch (error) {
             console.log(error);
         }
     }
+
 
     /**
         * This makes the http request and parse the url
