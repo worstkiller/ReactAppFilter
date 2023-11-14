@@ -14,6 +14,9 @@ Now move to next step and from inside the root project folder **ReactAppFilter**
 
 now your localhost project will be running on http://localhost:3000/ check in browser.
 
+![Screenshot 2023-11-14 at 1 15 48 PM](https://github.com/worstkiller/ReactAppFilter/assets/10533214/2b3a151d-a17c-4c31-88ee-568d62ac1714)
+
+
 Now our project is running we need a proxy server in localhost to bypass the CORS issue in localhost.
 hit this command in the terminal.
 
@@ -29,6 +32,7 @@ if you face any issues like port not matching etc.
  
 go to src->MainComponent.js and change the value of **downLoadLink** as per proxy values.
 by default its set to 8010, feel free to change to match the values returned by proxy command.
+
 <img width="477" alt="Screenshot 2023-11-14 at 1 13 04 PM" src="https://github.com/worstkiller/ReactAppFilter/assets/10533214/d66e7fd0-2545-4153-a450-f1061c31a2d2">
 
 `const downLoadLink = "http://localhost:8010/proxy/details?id=";`
